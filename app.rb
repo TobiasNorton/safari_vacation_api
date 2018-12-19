@@ -6,6 +6,16 @@ require 'sinatra/json'
 require 'sinatra/reloader' if development?
 # Requires the ActiveRecord code to work with the database
 require 'active_record'
+# Ignore CORS
+require 'rack/cors'
+
+# Allow anyone to access our API via a browser
+use Rack::Cors do |config|
+  config.allow do |allow|
+    allow.origins '*'
+    allow.resource '*'
+  end
+end
 
 ActiveRecord::Base.establish_connection(
 adapter: "postgresql",
@@ -21,8 +31,9 @@ end
 
 # Show all animals
 get '/animals' do
+
   seen_animals = SeenAnimal.all.reorder("id")
-  json({ seen_animals: seen_animals})
+  json(seen_animals)
   # The most simple way is >>>> json SeenAnimal.all
 end
 
