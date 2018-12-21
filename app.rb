@@ -79,3 +79,22 @@ delete '/animals/:id' do
   deleted_animal.destroy
   json deleted_animal
 end
+
+delete '/animals/:location' do
+  deleted_animal = SeenAnimal.find(params["location"])
+  deleted_animal.destroy
+  json deleted_animal
+end
+
+get 'animals/count/lionstigersbears'
+# def lions_tigers_bears_seen
+  sightings = []
+  SeenAnimal.all.each do |animal|
+    if (animal.species == "Lions" ||
+      animal.species == "Tigers" ||
+      animal.species == "Bears")
+      sightings.push(animal.count_of_times_seen)
+    end
+  end
+  puts sightings.sum
+end
